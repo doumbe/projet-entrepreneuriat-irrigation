@@ -1,23 +1,20 @@
 from bs4 import BeautifulSoup
 import json
-import requests
 
 class ExtractMeteoWeb(object):
+  """ Classe de simulation et de test en local """
   intitules=[]
   donnees=[]
   tableauFinal={}
   
   def __init__(self):
+    """ Initialise l'URL de la page Web des prévisions météo """
     print("---INIT---")
     self.url = 'https://www.lameteoagricole.net/meteo-heure-par-heure/Nice-06000.html'
     return
   
-  def getData(self):
-    print("---GETDATA---")
-    html = requests.get(self.url).text
-    return html
-    
   def lireData1(self):
+    """ Renvoie la partie des intitulés dans le code source de la page Web """
     print("---LIREDATA1---")
     f = "<div style=\"float:left;padding:0;margin:0;\">\
 <table id=\"meteoIntit\">\
@@ -60,6 +57,7 @@ class ExtractMeteoWeb(object):
     return f
     
   def lireData2(self):
+    """ Renvoie la partie des données dans le code source de la page Web """
     print("---LIREDATA2---")
     f ="<div id=\"lyr1\" style=\"float: left; padding: 0px; margin: 0px; position: absolute; left: 0px; top: 0px; visibility: visible;\" class=\"content\">\
 <table id=\"meteoHour\">\
@@ -91,6 +89,7 @@ class ExtractMeteoWeb(object):
     return f
 
   def transformData1(self,html):
+    """ Extrait la légende du tableau des prévisions météo du code source """
     print("---TRANSFORMDATA1---")
     f1=html.find("<table id=\"meteoIntit\">")
     f2=html.find("</table>",f1)
@@ -103,6 +102,7 @@ class ExtractMeteoWeb(object):
     return
     
   def transformData2(self,html):
+    """ Extrait le tableau des prévisions météo du code source """
     print("---TRANSFORMDATA2---")
     f1=html.find("<table id=\"meteoHour\">")
     f2=html.find("</table>",f1)
@@ -115,6 +115,7 @@ class ExtractMeteoWeb(object):
     return
     
   def parseList1(self):
+    """ Construit la liste des intitulés """
     print("---PARSELIST1---")
     tab = self.soup1.find('table', {'id': 'meteoIntit'})
     td = tab.find_all('td')
@@ -122,6 +123,7 @@ class ExtractMeteoWeb(object):
     return
   
   def parseList2(self):
+    """ Construit le tableau des données meteo """
     print("---PARSELIST2---")
     tab = self.soup2.find('table', {'id': 'meteoHour'})
     tr = tab.find_all('tr')
@@ -137,12 +139,14 @@ class ExtractMeteoWeb(object):
     return
   
   def setData(self):
+    """ Construit un dictionnaire en associant les données avec leurs intitulés """
     print("---SETDATA---")
     for i,intit in enumerate(self.intitules):
       self.tableauFinal[intit]=self.donnees[i]
     return
 
   def returnMeteoData(self):
+    """ Renvoie la liste des intitulés et le tableau des données météo """
     self.transformData1(self.lireData1())
     self.transformData2(self.lireData2())
     self.parseList1()

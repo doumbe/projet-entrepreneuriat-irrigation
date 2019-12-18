@@ -3,21 +3,25 @@ import json
 import requests
 
 class ExtractMeteoWeb(object):
+  """ Classe de récupération (scraping) et d'extraction (parsing) de données d'un site Web """
   intitules=[]
   donnees=[]
   tableauFinal={}
   
   def __init__(self):
+    """ Initialise l'URL de la page Web des previsions météo """
     print("---INIT---")
     self.url = 'https://www.lameteoagricole.net/meteo-heure-par-heure/Nice-06000.html'
     return
   
   def getData(self):
+    """ Recupère le code source de la page Web """
     print("---GETDATA---")
     html = requests.get(self.url).text
     return html
 
   def transformData(self,html):
+    """ Extrait le tableau des prévisions météo du code source """
     print("---TRANSFORMDATA---")
     print("--> part 1")
     f1=html.find("<table id=\"meteoIntit\">")
@@ -41,6 +45,7 @@ class ExtractMeteoWeb(object):
     return
     
   def parseList1(self):
+    """ Construit la liste des intitulés """
     print("---PARSELIST1---")
     tab = self.soup1.find('table', {'id': 'meteoIntit'})
     td = tab.find_all('td')
@@ -48,6 +53,7 @@ class ExtractMeteoWeb(object):
     return
   
   def parseList2(self):
+    """ Construit le tableau des données météo """
     print("---PARSELIST2---")
     tab = self.soup2.find('table', {'id': 'meteoHour'})
     tr = tab.find_all('tr')
@@ -63,12 +69,14 @@ class ExtractMeteoWeb(object):
     return
   
   def setData(self):
+    """ Construit un dictionnaire en associant les données avec leurs intitulés """
     print("---SETDATA---")
     for i,intit in enumerate(self.intitules):
       self.tableauFinal[intit]=self.donnees[i]
     return
   
   def returnMeteoData(self):
+    """ Renvoie la liste des intitulés et le tableau des données météo """
     self.transformData(self.getData())
     self.parseList1()
     self.parseList2()
