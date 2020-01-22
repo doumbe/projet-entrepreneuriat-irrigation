@@ -88,7 +88,7 @@ void loop(){
 
   //test de lecture
   if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.println(F("Failed to read from DHT11 sensor!"));
+    //Serial.println(F("Failed to read from DHT11 sensor!"));
     return;
   }
 
