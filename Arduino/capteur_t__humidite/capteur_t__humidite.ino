@@ -64,7 +64,7 @@ void moteur_reculer(){
 
 void setup(){
   Serial.begin(9600);
-  connect_wifi();
+  //connect_wifi();
   pinMode(PinLed, OUTPUT);
   pinMode(ENA, OUTPUT);
   pinMode(IN1, OUTPUT);
@@ -79,14 +79,14 @@ void loop(){
   float t = dht.readTemperature();
   float f = dht.readTemperature(true);
 
-  if (client.connect(server, port)) {
-    while(true){
-      client.write("coucou");
-      Serial.print(client.read());
-    }
-  }
+  //if (client.connect(server, port)) {
+  //  while(true){
+  //    client.write("coucou");
+  //    Serial.print(client.read());
+   // }
+ // }
 
-  //test de lecture
+  //test de lecture des données du capteur
   if (isnan(h) || isnan(t) || isnan(f)) {
     //Serial.println(F("Failed to read from DHT11 sensor!"));
     return;

@@ -1,22 +1,23 @@
 # coding: utf-8
+import pymongo
 import json
 from ExtractMeteoWeb_online import *
 #from ExtractMeteoWeb_local import *
 
 class MeteoReportWeb(object):
-  """ Classe Principale à executer qui construit un bulletin météo """
+  """ Classe qui construit un bulletin météo """
   emw=ExtractMeteoWeb()
   tableauFinal={}
-  
+
   def __init__(self):
     """ Recupère la liste des intitulés et le tableau des donnees météo """
-    print("---INIT---")
+    #print("---INIT---")
     self.intitules,self.donnees=self.emw.returnMeteoData()
     return
 
   def setMeteoReport(self):
     """ Compile les données et construit un bulletin météo heure par heure """
-    print("---setMeteoReport---")
+    #print("---setMeteoReport---")
     taille=len(self.intitules)
     self.horaires=[self.donnees[0][i]+' - '+self.donnees[1][i] for i in range(taille)]
     for j in range(taille):
@@ -25,7 +26,7 @@ class MeteoReportWeb(object):
 
   def afficheMeteoReport(self):
     """ Affiche le bulletin météo """
-    print("---afficheMeteoReport---")
+    #print("---afficheMeteoReport---")
     for H in self.horaires:
       print(H)
       for i,k in enumerate(self.tableauFinal[H],2):
