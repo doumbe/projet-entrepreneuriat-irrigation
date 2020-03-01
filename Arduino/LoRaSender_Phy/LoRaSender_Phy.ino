@@ -1,9 +1,10 @@
 #include <SPI.h>
 #include <LoRa.h>
+#include <ArduinoJson.h>
 #include "DHT.h"
 
 #define DHTTYPE DHT11
-#define DHTPIN 8
+#define DHTPIN 5
 
 // Parameters you can play with :
 int txPower = 14; // from 0 to 20, default is 14
@@ -76,12 +77,18 @@ void loop() {
     Serial.println(F("°C "));
     //Serial.print(hif);
     //Serial.println(F("°F"));
+
+    //String donnees = String(h)+";"+String(t)+";"+String(hic);
+    char data[10];
+    sprintf(data, "%03d;%02d;%02d", h, t, hic);
     
     // send packet LoRa
     LoRa.beginPacket();
-    String donnees = String(h)+";"+String(t)+";"+String(hic);
+    LoRa.print(data);
     LoRa.endPacket();
-    Serial.println("Sending packet with payload { "+donnees+" }");
+    Serial.print("Sending packet with payload { ");
+    Serial.print(data);
+    Serial.println(" }");
   }
   delay(1000);
 }

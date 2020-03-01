@@ -1,5 +1,5 @@
 # coding: utf-8
-import pymongo
+#import pymongo
 import json
 from ExtractMeteoWeb_online import *
 #from ExtractMeteoWeb_local import *
