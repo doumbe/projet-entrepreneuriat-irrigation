@@ -1,0 +1,27 @@
+<div style="display: flex; width: 100%">
+  <div style="display: block">
+    <div style="display:flex;">
+  <button mat-button class="buttonIndex">0</button>
+  <h1>Parcelle n°14: Plan de Tomates</h1>
+    </div>
+
+<h2>Réglages :</h2>
+<div class="reglages" *ngFor="let i of listReglages">
+<h2>{{i.Nom}} : {{i.Nombre}}%  </h2>
+</div>
+</div>
+<div style="display: block; width:50%">
+        <canvas baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [legend]="barChartLegend"
+          [chartType]="barChartType"
+          [colors]="chartColors">
+        </canvas>
+</div>
+</div>
+<button mat-button style='background-color: grey;color: black'>Activation Manuelle</button>
+
+
+
+

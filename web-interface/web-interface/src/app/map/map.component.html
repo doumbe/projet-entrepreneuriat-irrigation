@@ -1,0 +1,6 @@
+<div class="map">
+    <div class="listButton" *ngFor= "let i of listButton">
+        <button mat-button [ngStyle]="{ 'background-color': i.color,'color':i.color}" routerLink="/plot">{{i.number}}</button>
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+<div class="chart">
+      <canvas baseChart
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [chartType]="pieChartType"
+        [options]="chartOptions"
+        [plugins]="chartPlugins"
+        [colors]="chartColors"
+        [legend]="chartLegend">
+      </canvas>
+      <canvas baseChart
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+      </canvas>
+</div>
