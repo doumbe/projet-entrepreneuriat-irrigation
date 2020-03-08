@@ -1,6 +1,13 @@
 #include <SPI.h>
 #include <LoRa.h>
 #include <ArduinoJson.h>
+#include <Servo.h>
+
+#define SS 10
+#define RST 8
+#define DI0 2
+#define BAND 865E6  // Here you define the frequency carrier
+#define PUMPPIN 9    //peristaltic pump control pin
 
 // Parameters you can play with :
 int txPower = 14; // from 0 to 20, default is 14
@@ -8,15 +15,23 @@ int spreadingFactor = 12; // from 7 to 12, default is 12
 long signalBandwidth = 125E3; // 7.8E3, 10.4E3, 15.6E3, 20.8E3, 31.25E3,41.7E3,62.5E3,125E3,250E3,500e3, default is 125E3
 int codingRateDenominator=5; // Numerator is 4, and denominator from 5 to 8, default is 5
 int preambleLength=8; // from 2 to 20, default is 8
+int seuil_alerte = 30; // valeur du seuil apartir duquel l'alerte sécheresse est donnée
+Servo myservo;
 
-#define SS 10
-#define RST 8
-#define DI0 2
-#define BAND 865E6  // Here you define the frequency carrier
+void moteur_stop(){
+  myservo.write(90);
+}
+
+void moteur_avancer(){
+  myservo.write(0);
+}
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
+
+  myservo.attach(PUMPPIN);
+  moteur_stop();
 
   Serial.println("LoRa Receiver");
   Serial.print("SetFrequency : ");
@@ -48,7 +63,6 @@ void loop() {
     String s="";
     while (LoRa.available()) {
       s+=(char)LoRa.read();
-      //Serial.print((char)LoRa.read());
     }
     Serial.print(s);
     // print RSSI of packet
@@ -68,5 +82,13 @@ void loop() {
     j["index"] = hic;
     serializeJson(doc, Serial);
     Serial.println(j);
+    if(t>seuil_alerte){
+      Serial.print("ALERTE TEMPERATURE ");
+      Serial.print(t);
+      Serial.println(F(" °C"));
+      moteur_avancer();
+    }else{
+      moteur_stop();
+    }
   }
 }

@@ -1,5 +1,5 @@
 # coding: utf-8
-#import pymongo
+import pymongo
 import json
 from ExtractMeteoWeb_online import *
 #from ExtractMeteoWeb_local import *
@@ -7,11 +7,12 @@ from ExtractMeteoWeb_online import *
 class MeteoReportWeb(object):
   """ Classe qui construit un bulletin météo """
   emw=ExtractMeteoWeb()
-  tableauFinal={}
+  tableauJson={}
+  tableauMongo=[]
 
   def __init__(self):
     """ Recupère la liste des intitulés et le tableau des donnees météo """
-    #print("---INIT---")
+    print("---MeteoReportWeb---")
     self.intitules,self.donnees=self.emw.returnMeteoData()
     return
 
@@ -21,7 +22,9 @@ class MeteoReportWeb(object):
     taille=len(self.intitules)
     self.horaires=[self.donnees[0][i]+' - '+self.donnees[1][i] for i in range(taille)]
     for j in range(taille):
-      self.tableauFinal[self.horaires[j]]={self.intitules[i]:self.donnees[i][j] for i in range(2,taille)}
+      self.tableauJson[self.horaires[j]]={self.intitules[i]:self.donnees[i][j] for i in range(2,taille)}
+    #self.tableauMongo=[{k:self.tableauJson[k]} for k in self.tableauJson.keys()]
+    self.tableauMongo=[{"time":k,"data":v} for k,v in self.tableauJson.items()]
     return
 
   def afficheMeteoReport(self):
@@ -29,16 +32,21 @@ class MeteoReportWeb(object):
     #print("---afficheMeteoReport---")
     for H in self.horaires:
       print(H)
-      for i,k in enumerate(self.tableauFinal[H],2):
-        print('--> '+self.intitules[i]+' : '+mrw.tableauFinal[H][self.intitules[i]])
+      for i,k in enumerate(self.tableauJson[H],2):
+        print('--> '+self.intitules[i]+' : '+mrw.tableauJson[H][self.intitules[i]])
       print()
     return
 
 if __name__ == '__main__':
-  print("---MAIN---")
+  print("---MeteoReportWeb_MAIN---")
   mrw=MeteoReportWeb()
   mrw.setMeteoReport()
   mrw.afficheMeteoReport()
   print()
-  parsedJson = json.dumps(mrw.tableauFinal)
-  print(parsedJson)
+  parsedJson=json.dumps(mrw.tableauJson)
+  #print(parsedJson)
+  baseName="Agriculture"
+  colName="meteo"
+  client=pymongo.MongoClient()
+  dbTest=client[baseName][colName]
+  dbTest.insert_many(mrw.tableauMongo)

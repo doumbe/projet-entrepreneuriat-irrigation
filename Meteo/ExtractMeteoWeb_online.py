@@ -11,7 +11,7 @@ class ExtractMeteoWeb(object):
 
   def __init__(self):
     """ Initialise l'URL de la page Web des previsions météo """
-    #print("---INIT---")
+    print("---ExtractMeteoWeb---")
     self.url = 'https://www.lameteoagricole.net/meteo-heure-par-heure/Nice-06000.html'
     return
 
@@ -50,7 +50,7 @@ class ExtractMeteoWeb(object):
     #print("---PARSELIST1---")
     tab = self.soup1.find('table', {'id': 'meteoIntit'})
     td = tab.find_all('td')
-    self.intitules = [t.string for t in td]
+    self.intitules = [str(t.string).replace('.',' ') for t in td]
     return
 
   def parseList2(self):
@@ -84,7 +84,7 @@ class ExtractMeteoWeb(object):
     return self.intitules,self.donnees
 
 if __name__ == '__main__':
-  print("---MAIN---")
+  print("---ExtractMeteoWeb_MAIN---")
   emw = ExtractMeteoWeb()
   html=emw.getData()
   emw.transformData(html)

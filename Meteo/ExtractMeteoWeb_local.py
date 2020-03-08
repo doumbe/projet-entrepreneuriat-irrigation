@@ -1,3 +1,4 @@
+# coding: utf-8
 from bs4 import BeautifulSoup
 import json
 
@@ -119,7 +120,7 @@ class ExtractMeteoWeb(object):
     print("---PARSELIST1---")
     tab = self.soup1.find('table', {'id': 'meteoIntit'})
     td = tab.find_all('td')
-    self.intitules = [t.string for t in td]
+    self.intitules = [str(t.string).replace('.',' ') for t in td]
     return
   
   def parseList2(self):
