@@ -7,7 +7,7 @@
 #define RST 8
 #define DI0 2
 #define BAND 865E6  // Here you define the frequency carrier
-#define PUMPPIN 5    //peristaltic pump control pin
+#define PUMPPIN 9    //peristaltic pump control pin
 
 // Parameters you can play with :
 int txPower = 14; // from 0 to 20, default is 14
@@ -19,12 +19,12 @@ int seuil_alerte = 25; // valeur du seuil apartir duquel l'alerte sécheresse es
 Servo myservo;
 
 void moteur_stop(){
-  myservo.write(90);
+  //myservo.write(90);
   digitalWrite(9, LOW);
 }
 
 void moteur_avancer(){
-  myservo.write(0);
+  //myservo.write(0);
   digitalWrite(9, HIGH);
 }
 
