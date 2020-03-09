@@ -20,17 +20,20 @@ Servo myservo;
 
 void moteur_stop(){
   myservo.write(90);
+  digitalWrite(9, LOW);
 }
 
 void moteur_avancer(){
   myservo.write(0);
+  digitalWrite(9, HIGH);
 }
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  myservo.attach(PUMPPIN);
+  //myservo.attach(PUMPPIN);
+  pinMode(9, OUTPUT);
   moteur_stop();
 /*
   Serial.println("LoRa Receiver");
