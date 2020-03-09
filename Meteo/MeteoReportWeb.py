@@ -1,6 +1,7 @@
 # coding: utf-8
 import pymongo
 import json
+import time
 from ExtractMeteoWeb_online import *
 #from ExtractMeteoWeb_local import *
 
@@ -23,7 +24,6 @@ class MeteoReportWeb(object):
     self.horaires=[self.donnees[0][i]+' - '+self.donnees[1][i] for i in range(taille)]
     for j in range(taille):
       self.tableauJson[self.horaires[j]]={self.intitules[i]:self.donnees[i][j] for i in range(2,taille)}
-    #self.tableauMongo=[{k:self.tableauJson[k]} for k in self.tableauJson.keys()]
     self.tableauMongo=[{"time":k,"data":v} for k,v in self.tableauJson.items()]
     return
 
@@ -39,14 +39,16 @@ class MeteoReportWeb(object):
 
 if __name__ == '__main__':
   print("---MeteoReportWeb_MAIN---")
-  mrw=MeteoReportWeb()
-  mrw.setMeteoReport()
-  mrw.afficheMeteoReport()
-  print()
-  parsedJson=json.dumps(mrw.tableauJson)
-  #print(parsedJson)
-  baseName="Agriculture"
-  colName="meteo"
-  client=pymongo.MongoClient()
-  dbTest=client[baseName][colName]
-  dbTest.insert_many(mrw.tableauMongo)
+  while 1:
+    mrw=MeteoReportWeb()
+    mrw.setMeteoReport()
+    mrw.afficheMeteoReport()
+    print()
+    parsedJson=json.dumps(mrw.tableauJson)
+    #print(parsedJson)
+    baseName="Agriculture"
+    colName="meteo"
+    client=pymongo.MongoClient()
+    dbTest=client[baseName][colName]
+    dbTest.insert_many(mrw.tableauMongo)
+    time.sleep(60)
